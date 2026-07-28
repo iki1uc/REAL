@@ -1,13 +1,24 @@
-setInterval(() => {
-  log("Auto‑Scan läuft …", "info");
-  NC_CMD_RUN();
-}, 5000);
-setInterval(() => {
-  log("Auto‑Scan läuft …", "info");
-  NC_CMD_RUN();
-  NC_PIPELINE_MEASURE();   // Pipeline-Messung hinzufügen
-}, 5000);
-panel.innerHTML += "<h3>Pipeline‑Status</h3>";
-log("Pipeline Zyklus: 0 → 1 → 2 → 0", "ok");
-log("Gründer = Station 0", "ok");
-log("Watson = Station 2", "ok");
+load_REAL()
+load_NC_command()
+
+scan_root()
+scan_cross()
+scan_query()
+scan_transport()
+scan_respo()
+scan_layer()
+scan_matrix()
+scan_pipeline()
+scan_pq()
+
+station0_action()
+station1_task()
+station2_rule()
+station0_root()
+
+scan_GPU()
+scan_CPU()
+scan_RAM()
+scan_ROM()
+
+send_to_panel()
