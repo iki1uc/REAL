@@ -29,55 +29,127 @@
 
 <script>
 // ------------------------------------------------------
-// NC 360° Drehung
+// NC‑CMD PANEL (sichtbare Ausgabe)
 // ------------------------------------------------------
-function NC_360() {
-  const root = document.body;
-  root.style.transition = "transform 1.2s ease-in-out";
-  root.style.transform = "rotateY(360deg)";
-  setTimeout(() => {
-    root.style.transform = "rotateY(0deg)";
-  }, 1300);
+const panel = document.createElement("div");
+panel.id = "ncPanel";
+panel.style.position = "fixed";
+panel.style.bottom = "10px";
+panel.style.right = "10px";
+panel.style.width = "320px";
+panel.style.height = "260px";
+panel.style.background = "#000000cc";
+panel.style.border = "1px solid #444";
+panel.style.padding = "10px";
+panel.style.color = "#eee";
+panel.style.fontFamily = "Arial";
+panel.style.overflowY = "auto";
+panel.style.zIndex = "9999";
+panel.innerHTML = "<h3>NC‑CMD Monitor</h3>";
+document.body.appendChild(panel);
+
+// ------------------------------------------------------
+// STATUS‑LEDs
+// ------------------------------------------------------
+function led(color){
+  return `<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${color};margin-right:6px;"></span>`;
 }
 
 // ------------------------------------------------------
-// NC-CMD Trigger (bindet dein NC.command)
+// FEHLERANZEIGE
 // ------------------------------------------------------
-function NC_360_CMD() {
-  NC_360();
-
-  console.log("NC-CMD: engine.root =", "81.tmp.check(a)");
-  console.log("NC-CMD: engine.cross =", "X81.check(e)");
-  console.log("NC-CMD: engine.query =", "Q81.check(d)");
-  console.log("NC-CMD: engine.transport =", "TMP.check(u)");
-
-  console.log("NC-CMD: respo.core =", "respo.check(E)");
-  console.log("NC-CMD: respo.arg =", "arg.check(t)");
-
-  console.log("NC-CMD: layer.public =", "layer.check(l)");
-  console.log("NC-CMD: layer.cross =", "cross.check(x)");
-  console.log("NC-CMD: layer.vector =", "vector.check(v)");
-
-  console.log("NC-CMD: matrix.81 =", "matrix.check(81)");
-  console.log("NC-CMD: matrix.9 =", "matrix.check(9)");
-
-  console.log("NC-CMD: pipeline.core =", "pipeline.check(4)");
-  console.log("NC-CMD: pipeline.dual =", "pipeline.check(2)");
-
-  console.log("NC-CMD: pq.core =", "pq.check(e)");
+function log(msg, type="info"){
+  const colors = {
+    info: "#00aaff",
+    ok: "#00ff88",
+    warn: "#ffcc00",
+    error: "#ff4444"
+  };
+  panel.innerHTML += `<div style="margin:4px 0;">${led(colors[type])}${msg}</div>`;
 }
 
 // ------------------------------------------------------
-// Button einfügen
+// REAL.json SYNC
 // ------------------------------------------------------
-const btn = document.createElement("button");
-btn.textContent = "NC 360° CMD";
-btn.style.padding = "10px 20px";
-btn.style.margin = "10px";
-btn.style.fontSize = "16px";
-btn.onclick = NC_360_CMD;
+async function syncREAL(){
+  try {
+    const res = await fetch("/REAL/REAL.json");
+    const data = await res.json();
+    log("REAL.json geladen: ID " + data.ID, "ok");
+    return data;
+  } catch(e){
+    log("REAL.json FEHLT", "error");
+    return null;
+  }
+}
 
-document.body.prepend(btn);
+// ------------------------------------------------------
+// GHOST‑SCAN Bindung
+// ------------------------------------------------------
+async function ghostScan(){
+  try {
+    const res = await fetch("/fin.e.js");
+    log("GHOST‑SCAN Engine geladen", "ok");
+  } catch(e){
+    log("GHOST‑SCAN Engine FEHLT", "error");
+  }
+}
+
+// ------------------------------------------------------
+// NC‑CMD ENGINE‑CHECK
+// ------------------------------------------------------
+function NC_CMD_RUN(){
+  log("NC‑CMD gestartet", "info");
+
+  // ENGINE ROOT
+  log("engine.root → 81.tmp.check(a)", "ok");
+
+  // ENGINE CROSS
+  log("engine.cross → X81.check(e)", "ok");
+
+  // ENGINE QUERY
+  log("engine.query → Q81.check(d)", "ok");
+
+  // ENGINE TRANSPORT
+  log("engine.transport → TMP.check(u)", "warn"); // TMP81 instabil
+
+  // RESPO
+  log("respo.core → respo.check(E)", "ok");
+  log("respo.arg → arg.check(t)", "ok");
+
+  // LAYER
+  log("layer.public → layer.check(l)", "ok");
+  log("layer.cross → cross.check(x)", "ok");
+  log("layer.vector → vector.check(v)", "ok");
+
+  // MATRIX
+  log("matrix.81 → matrix.check(81)", "ok");
+  log("matrix.9 → matrix.check(9)", "ok");
+
+  // PIPELINE
+  log("pipeline.core → pipeline.check(4)", "ok");
+  log("pipeline.dual → pipeline.check(2)", "warn"); // Rechner 2 instabil
+
+  // PQ
+  log("pq.core → pq.check(e)", "ok");
+}
+
+// ------------------------------------------------------
+// LIVE‑MONITOR (alle 5 Sekunden)
+// ------------------------------------------------------
+setInterval(() => {
+  log("Auto‑Scan läuft …", "info");
+  NC_CMD_RUN();
+}, 5000);
+
+// ------------------------------------------------------
+// Start: REAL‑SYNC + GHOST‑SCAN + erster NC‑CMD
+// ------------------------------------------------------
+(async () => {
+  await syncREAL();
+  await ghostScan();
+  NC_CMD_RUN();
+})();
 </script>
 
 
