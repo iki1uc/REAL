@@ -1,1 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>REAL‑SCAN · FAIL</title>
+<style>
+body { background:#110; color:#f55; font-family:Consolas; padding:20px; }
+pre { background:#200; padding:15px; border:1px solid #400; }
+h1 { color:#f55; }
+</style>
+</head>
+
+<body>
+<h1>REAL‑SCAN · FAIL</h1>
+
+<div id="out"></div>
+
+<script type="module">
+import { REAL_SCAN } from "./fin.e.js";
+
+const scan = REAL_SCAN();
+
+document.getElementById("out").innerHTML =
+  `<pre>${JSON.stringify(scan, null, 2)}</pre>`;
+</script>
+
+</body>
+</html>
 
