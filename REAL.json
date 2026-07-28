@@ -1,24 +1,35 @@
 {
-    "GRUENDER": "ridvan",
-    "ID": 14001,
-    "INDEX": "e",
-    "NAME": "REAL",
-    "ORT": "/REAL/",
-    "ENDUNG": "json",
-    "FUNKTION": "1",
-    "MASTER_ID": 1,
-    "SLAVE_ID": 14001,
-    "STATUS": "1",
-    "IST": "neu",
-    "SOLL": "aktiv",
-    "IST_IST": "ungleich",
-    "VERWALTUNG3": {
-        "SET": { "UP": true, "DOWN": false },
-        "IO": { "IN": true, "OUT": true },
-        "EXE": { "RUN": true, "PU": true, "PUBLIC": true }
+  "NC-CMD": {
+    "engine": {
+      "root": "81.tmp.check(a)",
+      "cross": "X81.check(e)",
+      "query": "Q81.check(d)",
+      "transport": "TMP.check(u)"
     },
-    "RAUM": { "X": 14, "Y": 0, "Z": 1 },
-    "MASSE": 1,
-    "WAHRHEIT": "REAL",
-    "ROOT": true
+
+    "respo": {
+      "core": "respo.check(E)",
+      "arg": "arg.check(t)"
+    },
+
+    "layer": {
+      "public": "layer.check(l)",
+      "cross": "cross.check(x)",
+      "vector": "vector.check(v)"
+    },
+
+    "matrix": {
+      "m81": "matrix.check(81)",
+      "m9": "matrix.check(9)"
+    },
+
+    "pipeline": {
+      "core": "pipeline.check(4)",
+      "dual": "pipeline.check(2)"
+    },
+
+    "pq": {
+      "core": "pq.check(e)"
+    }
+  }
 }
