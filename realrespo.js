@@ -46,3 +46,15 @@ export function REAL_RESPO() {
 
     return out;
 }
+export function REAL_RESPO_POPUP(out) {
+    const w = window.open("", "REAL-RESPO", "width=600,height=700");
+    w.document.write(`
+        <style>
+            body { background:#000; color:#eee; font-family:Consolas; padding:20px; }
+            pre { background:#111; padding:15px; border:1px solid #333; padding:10px; }
+            h1 { color:#6cf; }
+        </style>
+        <h1>REAL‑RESPO · Output</h1>
+        <pre>${JSON.stringify(out, null, 2)}</pre>
+    `);
+}
