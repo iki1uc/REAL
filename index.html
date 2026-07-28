@@ -29,80 +29,57 @@
 
 <script>
 // ------------------------------------------------------
-// RESPO-Liste (ALLE Cluster)
+// NC 360° Drehung
 // ------------------------------------------------------
-const RESPO_NAMES = [
-  "AIR",
-  "boerse",
-  "markt3",
-  "HOME",
-  "USE",
-  "ACSH",
-  "REAL",
-  "BIL",
-  "DU",
-  "NG"
-];
-
-// ------------------------------------------------------
-// Loader
-// ------------------------------------------------------
-async function loadRespo(name){
-  try {
-    const res = await fetch(`/RESPO/${name}.json`);
-    return await res.json();
-  } catch(e){
-    return { NAME:name, MISS:true };
-  }
-}
-
-async function loadAllRespos(){
-  const respos = [];
-  for(const n of RESPO_NAMES){
-    respos.push(await loadRespo(n));
-  }
-  return respos;
+function NC_360() {
+  const root = document.body;
+  root.style.transition = "transform 1.2s ease-in-out";
+  root.style.transform = "rotateY(360deg)";
+  setTimeout(() => {
+    root.style.transform = "rotateY(0deg)";
+  }, 1300);
 }
 
 // ------------------------------------------------------
-// Renderer
+// NC-CMD Trigger (bindet dein NC.command)
 // ------------------------------------------------------
-function renderScan(scan){
-  const out = document.getElementById("output");
-  out.innerHTML = "";
+function NC_360_CMD() {
+  NC_360();
 
-  scan.forEach(r => {
-    const box = document.createElement("div");
-    box.className = "respo-box";
+  console.log("NC-CMD: engine.root =", "81.tmp.check(a)");
+  console.log("NC-CMD: engine.cross =", "X81.check(e)");
+  console.log("NC-CMD: engine.query =", "Q81.check(d)");
+  console.log("NC-CMD: engine.transport =", "TMP.check(u)");
 
-    let statusClass = "ok";
-    if(r.RESULT === "HELFEN") statusClass = "help";
-    if(r.ERROR === true) statusClass = "error";
-    if(r.MISS === true) statusClass = "error";
+  console.log("NC-CMD: respo.core =", "respo.check(E)");
+  console.log("NC-CMD: respo.arg =", "arg.check(t)");
 
-    box.innerHTML = `
-      <h2 class="${statusClass}">${r.NAME}</h2>
-      <p><b>ID:</b> ${r.ID}</p>
-      <p><b>LAGE:</b> ${r.RAUM ? JSON.stringify(r.RAUM) : "(keine LAGE)"}</p>
-      <p><b>STATUS:</b> ${r.STATUS}</p>
-      <p><b>RESULT:</b> ${r.RESULT}</p>
-      <p><b>OUT:</b> ${JSON.stringify(r.OUT)}</p>
-      <p><b>REAL:</b> ${r.WAHRHEIT || "?"}</p>
-      <p><b>EDIT:</b> ${r.IST_IST || "?"}</p>
-    `;
+  console.log("NC-CMD: layer.public =", "layer.check(l)");
+  console.log("NC-CMD: layer.cross =", "cross.check(x)");
+  console.log("NC-CMD: layer.vector =", "vector.check(v)");
 
-    out.appendChild(box);
-  });
+  console.log("NC-CMD: matrix.81 =", "matrix.check(81)");
+  console.log("NC-CMD: matrix.9 =", "matrix.check(9)");
+
+  console.log("NC-CMD: pipeline.core =", "pipeline.check(4)");
+  console.log("NC-CMD: pipeline.dual =", "pipeline.check(2)");
+
+  console.log("NC-CMD: pq.core =", "pq.check(e)");
 }
 
 // ------------------------------------------------------
-// Start
+// Button einfügen
 // ------------------------------------------------------
-loadAllRespos().then(respos => {
-  const scan = respos.map(r => GHOST_SCAN_REAL(r));
-  renderScan(scan);
-});
+const btn = document.createElement("button");
+btn.textContent = "NC 360° CMD";
+btn.style.padding = "10px 20px";
+btn.style.margin = "10px";
+btn.style.fontSize = "16px";
+btn.onclick = NC_360_CMD;
+
+document.body.prepend(btn);
 </script>
+
 
 </body>
 </html>
