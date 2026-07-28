@@ -47,3 +47,39 @@ export function REAL_SCAN() {
                "Kritisch"
   };
 }
+export function REAL_SCAN() {
+
+  const decodeOK = (NC.status !== "FAIL");
+  const contrast = LINE.quality || 0.81;
+  const angleDeg = (LINE.angle * 57.2958).toFixed(1);
+
+  const issues = [
+    NC.status !== "OK",
+    CMD.state === "ERROR",
+    ROM.ready === false,
+    contrast < 0.5
+  ].filter(x => x).length;
+
+  const score = Math.max(0, Math.min(100,
+    (decodeOK ? 40 : 0) +
+    (contrast * 40) +
+    (ROM.ready ? 10 : 0) -
+    (issues * 10)
+  ));
+
+  return {
+    decode: decodeOK ? "OK" : "FAIL",
+    winkel_deg: angleDeg,
+    contrast_pct: Math.round(contrast * 100),
+    rom_ready: ROM.ready,
+    nc_status: NC.status,
+    cmd_state: CMD.state,
+    issues,
+    score,
+    kommentar: score > 80 ? "Sehr gut" :
+               score > 60 ? "Gut" :
+               score > 40 ? "Mittel" :
+               score > 20 ? "Schwach" :
+               "Kritisch"
+  };
+}
