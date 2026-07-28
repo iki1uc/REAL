@@ -5,3 +5,8 @@ NC-HW {
     ROM = engine.root
 }
 engine.root = 81.tmp
+HW.GPU = engine.power
+HW.CPU = engine.logic
+HW.RAM = engine.memory
+HW.ROM = engine.root
+HW.ROOT = 81.tmp
