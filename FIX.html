@@ -1,1 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>REAL‑SCAN · FIX</title>
+<style>
+body { background:#111; color:#ff0; font-family:Consolas; padding:20px; }
+pre { background:#221; padding:15px; border:1px solid #550; }
+h1 { color:#ff0; }
+.fix { margin:10px 0; padding:10px; background:#332; border-left:4px solid #ff0; }
+</style>
+</head>
+
+<body>
+<h1>REAL‑SCAN · FIX</h1>
+
+<div id="fix"></div>
+<div id="out"></div>
+
+<script type="module">
+import { REAL_SCAN } from "./fin.e.js";
+
+const scan = REAL_SCAN();
+
+let fixList = "";
+
+if(scan.decode === "FAIL") fixList += `<div class="fix">Decode‑Fehler → Struktur prüfen</div>`;
+if(scan.contrast_pct < 50) fixList += `<div class="fix">Kontrast niedrig → line.js prüfen</div>`;
+if(!scan.rom_ready) fixList += `<div class="fix">ROM nicht bereit → ROM.build prüfen</div>`;
+if(scan.cmd_state === "ERROR") fixList += `<div class="fix">CMD‑Fehler → NC.command prüfen</div>`;
+if(scan.nc_status !== "OK") fixList += `<div class="fix">NC‑Scan Fehler → NC.scan prüfen</div>`;
+if(scan.issues === 0) fixList += `<div class="fix">Keine Probleme → System stabil</div>`;
+
+document.getElementById("fix").innerHTML = fixList;
+document.getElementById("out").innerHTML =
+  `<pre>${JSON.stringify(scan, null, 2)}</pre>`;
+</script>
+
+</body>
+</html>
 
