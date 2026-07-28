@@ -31,5 +31,13 @@
     "pq": {
       "core": "pq.check(e)"
     }
+  },
+
+  "NC-HW": {
+    "GPU": "engine.power",
+    "CPU": "engine.logic",
+    "RAM": "engine.memory",
+    "ROM": "engine.root",
+    "ROOT": "81.tmp"
   }
 }
