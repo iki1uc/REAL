@@ -18,24 +18,30 @@
   .error { color:#ff4444; }
 </style>
 </head>
-<button onclick="REAL_RESPO_POPUP(REAL_RESPO())">REAL‑RESPO Popup</button>
-<button onclick="REAL_RESPO_HEATMAP(REAL_RESPO())">REAL‑Heatmap</button>
-<button onclick="REAL_RESPO_3D(REAL_RESPO())">REAL‑3D Kugel</button>
-<button onclick="REAL_RESPO_QMOVE(REAL_RESPO())">REAL‑Q‑Move</button>
-<button onclick="REAL_RESPO_POPUP(REAL_RESPO())">REAL‑RESPO Popup</button>
-<button onclick="REAL_RESPO_HEATMAP(REAL_RESPO())">REAL‑Heatmap</button>
-<button onclick="REAL_RESPO_3D(REAL_RESPO())">REAL‑3D Kugel</button>
-<button onclick="REAL_RESPO_QMOVE(REAL_RESPO())">REAL‑Q‑Move</button>
 
 <body>
 
 <h1>GHOST‑SCAN – Systemlage</h1>
 
+<!-- BUTTONS -->
+<button onclick="REAL_RESPO_POPUP(REAL_RESPO())">REAL‑RESPO Popup</button>
+<button onclick="REAL_RESPO_HEATMAP(REAL_RESPO())">REAL‑Heatmap</button>
+<button onclick="REAL_RESPO_3D(REAL_RESPO())">REAL‑3D Kugel</button>
+<button onclick="REAL_RESPO_QMOVE(REAL_RESPO())">REAL‑Q‑Move</button>
+
+<button onclick="REAL_RESPO_POPUP(REAL_SCAN())">REAL‑SCAN Popup</button>
+<button onclick="REAL_RESPO_HEATMAP(REAL_SCAN())">REAL‑SCAN Heatmap</button>
+<button onclick="REAL_RESPO_3D(REAL_SCAN())">REAL‑SCAN 3D Kugel</button>
+<button onclick="REAL_RESPO_QMOVE(REAL_SCAN())">REAL‑SCAN Q‑Move</button>
+
 <div id="output"></div>
 
-<script src="/fin.e.js"></script>
+<script type="module" src="/fin.e.js"></script>
 
-<script>
+<script type="module">
+import { REAL_SCAN, REAL_RESPO } from "/fin.e.js";
+import { REAL_RESPO_POPUP, REAL_RESPO_HEATMAP, REAL_RESPO_3D, REAL_RESPO_QMOVE } from "/fin.e.js";
+
 // ------------------------------------------------------
 // NC‑CMD PANEL (sichtbare Ausgabe)
 // ------------------------------------------------------
@@ -155,7 +161,7 @@ function NC_CMD_RUN(){
 setInterval(() => {
   log("Auto‑Scan läuft …", "info");
   NC_CMD_RUN();
-  NC_PIPELINE_MEASURE();   // Pipeline-Messung hinzugefügt
+  NC_PIPELINE_MEASURE();
 }, 5000);
 
 // ------------------------------------------------------
@@ -166,8 +172,13 @@ setInterval(() => {
   await ghostScan();
   NC_CMD_RUN();
   NC_PIPELINE_MEASURE();
+
+  const out = REAL_SCAN();
+  document.getElementById("output").innerHTML =
+    "<pre>" + JSON.stringify(out, null, 2) + "</pre>";
 })();
 </script>
 
 </body>
 </html>
+1
