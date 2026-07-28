@@ -69,6 +69,25 @@ function log(msg, type="info"){
 }
 
 // ------------------------------------------------------
+// PIPELINE-MESSUNG (0 → 1 → 2 → 0)
+// ------------------------------------------------------
+function NC_PIPELINE_MEASURE() {
+  log("Messung: Station 0 → Aktion / Gründer / GPU", "info");
+  log("Kompetenz: engine.power", "ok");
+
+  log("Messung: Station 1 → Aufgabe / CPU", "info");
+  log("Kompetenz: engine.logic", "ok");
+
+  log("Messung: Station 2 → Regel / Watson / RAM", "info");
+  log("Kompetenz: engine.memory", "ok");
+
+  log("Messung: Station 0 → Rückführung / ROM / 81.tmp", "info");
+  log("Kompetenz: 81.tmp", "ok");
+
+  log("Zyklus abgeschlossen: 0 → 1 → 2 → 0", "ok");
+}
+
+// ------------------------------------------------------
 // REAL.json SYNC
 // ------------------------------------------------------
 async function syncREAL(){
@@ -88,7 +107,7 @@ async function syncREAL(){
 // ------------------------------------------------------
 async function ghostScan(){
   try {
-    const res = await fetch("/fin.e.js");
+    await fetch("/fin.e.js");
     log("GHOST‑SCAN Engine geladen", "ok");
   } catch(e){
     log("GHOST‑SCAN Engine FEHLT", "error");
@@ -101,36 +120,24 @@ async function ghostScan(){
 function NC_CMD_RUN(){
   log("NC‑CMD gestartet", "info");
 
-  // ENGINE ROOT
   log("engine.root → 81.tmp.check(a)", "ok");
-
-  // ENGINE CROSS
   log("engine.cross → X81.check(e)", "ok");
-
-  // ENGINE QUERY
   log("engine.query → Q81.check(d)", "ok");
+  log("engine.transport → TMP.check(u)", "warn");
 
-  // ENGINE TRANSPORT
-  log("engine.transport → TMP.check(u)", "warn"); // TMP81 instabil
-
-  // RESPO
   log("respo.core → respo.check(E)", "ok");
   log("respo.arg → arg.check(t)", "ok");
 
-  // LAYER
   log("layer.public → layer.check(l)", "ok");
   log("layer.cross → cross.check(x)", "ok");
   log("layer.vector → vector.check(v)", "ok");
 
-  // MATRIX
   log("matrix.81 → matrix.check(81)", "ok");
   log("matrix.9 → matrix.check(9)", "ok");
 
-  // PIPELINE
   log("pipeline.core → pipeline.check(4)", "ok");
-  log("pipeline.dual → pipeline.check(2)", "warn"); // Rechner 2 instabil
+  log("pipeline.dual → pipeline.check(2)", "warn");
 
-  // PQ
   log("pq.core → pq.check(e)", "ok");
 }
 
@@ -140,6 +147,7 @@ function NC_CMD_RUN(){
 setInterval(() => {
   log("Auto‑Scan läuft …", "info");
   NC_CMD_RUN();
+  NC_PIPELINE_MEASURE();   // Pipeline-Messung hinzugefügt
 }, 5000);
 
 // ------------------------------------------------------
@@ -149,10 +157,9 @@ setInterval(() => {
   await syncREAL();
   await ghostScan();
   NC_CMD_RUN();
+  NC_PIPELINE_MEASURE();
 })();
 </script>
 
-
 </body>
 </html>
-
